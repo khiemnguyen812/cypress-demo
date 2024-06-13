@@ -1,0 +1,44 @@
+[
+  {
+    "name": "login to Dashboard page",
+    "username": "Admin",
+    "password": "admin123",
+    "expected": "Dashboard",
+    "access": true
+  },
+  {
+    "name": "incorrect username error message",
+    "username": "dummy_username",
+    "password": "admin123",
+    "expected": "Invalid credentials",
+    "access": false
+  },
+  {
+    "name": "incorrect password error message",
+    "username": "Admin",
+    "password": "dummy_password",
+    "expected": "Invalid credentials",
+    "access": false
+  },
+  {
+    "name": "error message for empty username",
+    "username": "",
+    "password": "admin123",
+    "expected": "Required",
+    "access": false
+  },
+  {
+    "name": "error message for empty password",
+    "username": "Admin",
+    "password": "",
+    "expected": "Required",
+    "access": false
+  },
+  {
+    "name": "error message for empty username and password",
+    "username": "",
+    "password": "",
+    "expected": "RequiredRequired",
+    "access": false
+  }
+]
