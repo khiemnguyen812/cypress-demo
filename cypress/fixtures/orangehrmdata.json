@@ -1,0 +1,18 @@
+{
+    "username":"Admin",
+    "password":"admin123",
+
+    "firstNameCandidate":"Hieu",
+    "middleNameCandidate":"Vo Minh",
+    "lastNameCandidate":"Nguyen",
+    "vacancy":"Ultra45 Primess",
+    "email":"hieu.work@test.com",
+    "contactNumber":"072891821",
+    "resume":"./cypress/fixtures/cv.pdf",
+
+    "jobTitle":"Testing manager",
+
+    "firstNameEmployee":"Dinh",
+    "middleNameEmployee":"Van",
+    "lastNameEmployee":"Luong"
+}
