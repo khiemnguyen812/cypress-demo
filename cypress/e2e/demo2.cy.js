@@ -1,5 +1,5 @@
 // Before each run:
-//    Change vacancy and jobTitle in orangehrmdata.json
+//    Change vacancy and jobTitle and idEmployee in orangehrmdata.json
 // Cause it cannot create duplicate vacancy and jobtitle
 
 describe("Recruit employee workflow", () => {
@@ -14,7 +14,7 @@ describe("Recruit employee workflow", () => {
    beforeEach("Precondition - Login", () => {
       cy.clearCookies();
       cy.viewport(1920, 1080);
-      
+
       cy.visit("https://opensource-demo.orangehrmlive.com");
 
       // Login
@@ -54,6 +54,16 @@ describe("Recruit employee workflow", () => {
 
       // Validation
       cy.contains("Localization").should("be.visible");
+
+      //Set module
+      cy.visit("https://opensource-demo.orangehrmlive.com/web/index.php/admin/viewModules");
+      cy.get('input[type="checkbox"]').each(($el) => {
+         cy.wrap($el).check({ force: true }); // Wrap and check, force if needed
+       });
+      cy.get("button[type='submit']").click();
+
+      //Validation
+      cy.contains("Success").should("be.visible");
    });
 
    before("Precondition - create a employee", () => {
@@ -67,6 +77,7 @@ describe("Recruit employee workflow", () => {
       cy.get("input[name='firstName']").type(data.firstNameEmployee);
       cy.get("input[name='middleName']").type(data.middleNameEmployee);
       cy.get("input[name='lastName']").type(data.lastNameEmployee);
+      cy.get("div[class='oxd-input-group oxd-input-field-bottom-space'] div input[class='oxd-input oxd-input--active']").type(data.idEmployee)
 
       cy.get("button[type='submit']").click();
 
