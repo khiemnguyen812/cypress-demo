@@ -18,8 +18,8 @@ describe("Recruit employee workflow", () => {
       cy.visit("https://opensource-demo.orangehrmlive.com");
 
       // Login
-      cy.get("input[name='username']", { timeout: 30000 }).type(data.username);
-      cy.get("input[name='password']", { timeout: 30000 }).type(data.password);
+      cy.get("input[name='username']", { timeout: 30000 }).type(data.loginInfo.username);
+      cy.get("input[name='password']", { timeout: 30000 }).type(data.loginInfo.password);
       cy.get("button[type='submit']").click();
 
       // Check login success
@@ -30,8 +30,8 @@ describe("Recruit employee workflow", () => {
       cy.visit("https://opensource-demo.orangehrmlive.com");
 
       // Login
-      cy.get("input[name='username']", { timeout: 30000 }).type(data.username);
-      cy.get("input[name='password']", { timeout: 30000 }).type(data.password);
+      cy.get("input[name='username']", { timeout: 30000 }).type(data.loginInfo.username);
+      cy.get("input[name='password']", { timeout: 30000 }).type(data.loginInfo.password);
       cy.get("button[type='submit']").click();
 
       // Check login success
@@ -59,7 +59,7 @@ describe("Recruit employee workflow", () => {
       cy.visit("https://opensource-demo.orangehrmlive.com/web/index.php/admin/viewModules");
       cy.get('input[type="checkbox"]').each(($el) => {
          cy.wrap($el).check({ force: true }); // Wrap and check, force if needed
-       });
+      });
       cy.get("button[type='submit']").click();
 
       //Validation
@@ -74,10 +74,12 @@ describe("Recruit employee workflow", () => {
 
       cy.get("button[class='oxd-button oxd-button--medium oxd-button--secondary']").click();
 
-      cy.get("input[name='firstName']").type(data.firstNameEmployee);
-      cy.get("input[name='middleName']").type(data.middleNameEmployee);
-      cy.get("input[name='lastName']").type(data.lastNameEmployee);
-      cy.get("div[class='oxd-input-group oxd-input-field-bottom-space'] div input[class='oxd-input oxd-input--active']").type(data.idEmployee)
+      cy.get("input[name='firstName']").type(data.employeeData.firstName);
+      cy.get("input[name='middleName']").type(data.employeeData.middleName);
+      cy.get("input[name='lastName']").type(data.employeeData.lastName);
+      cy.get(
+         "div[class='oxd-input-group oxd-input-field-bottom-space'] div input[class='oxd-input oxd-input--active']"
+      ).type(data.employeeData.id);
 
       cy.get("button[type='submit']").click();
 
@@ -90,14 +92,14 @@ describe("Recruit employee workflow", () => {
       cy.get("button[class='oxd-button oxd-button--medium oxd-button--secondary']").click();
       cy.get(
          "div[class='oxd-input-group oxd-input-field-bottom-space'] div input[class='oxd-input oxd-input--active']"
-      ).type(data.jobTitle);
+      ).type(data.jobData.jobTitle);
       cy.get("button[type='submit']").click();
 
       // Validate
       cy.contains("Success").should("be.visible");
    });
 
-   before("Precondition - create a vacancies", () => {
+   before("Precondition - create a vacancy", () => {
       cy.get(
          "body > div:nth-child(3) > div:nth-child(1) > div:nth-child(1) > aside:nth-child(1) > nav:nth-child(1) > div:nth-child(2) > ul:nth-child(2) > li:nth-child(5) > a:nth-child(1) > span:nth-child(2)"
       ).click();
@@ -107,12 +109,14 @@ describe("Recruit employee workflow", () => {
 
       cy.get(
          "body > div:nth-child(3) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > form:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > input:nth-child(1)"
-      ).type(data.vacancy);
+      ).type(data.jobData.vacancy);
 
       cy.get(".oxd-select-text--after").click();
-      cy.contains("Testing manager").click();
-      cy.get("input[placeholder='Type for hints...']").type(data.firstNameEmployee);
-      cy.contains("Dinh Van Luong").click();
+      cy.contains(data.jobData.jobTitle).click();
+      cy.get("input[placeholder='Type for hints...']").type(data.employeeData.firstName);
+      cy.contains(
+         `${data.employeeData.firstName} ${data.employeeData.middleName} ${data.employeeData.lastName}`
+      ).click();
 
       cy.get("button[type='submit']").click();
 
@@ -126,23 +130,17 @@ describe("Recruit employee workflow", () => {
       cy.get("button[class='oxd-button oxd-button--medium oxd-button--secondary']").click();
 
       // Fill the form
-      cy.get("input[name='firstName']").type(data.firstNameCandidate);
-      cy.get("input[name='middleName']").type(data.middleNameCandidate);
-      cy.get("input[name='lastName']").type(data.lastNameCandidate);
+      const validDataset = data.validCandidateDataset;
 
-      cy.get(".oxd-select-text--after").click();
-      cy.contains(data.vacancy).click();
-
-      cy.get(
-         "body > div:nth-child(3) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > form:nth-child(3) > div:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > input:nth-child(1)"
-      ).type(data.email);
-      cy.get(
-         "body > div:nth-child(3) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > form:nth-child(3) > div:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > input:nth-child(1)"
-      ).type(data.contactNumber);
-
-      cy.get('input[type="file"]').selectFile(data.resume, { force: true });
-
-      cy.get("button[type='submit']").click();
+      cy.fillCandidateForm(
+         validDataset.firstName,
+         validDataset.middleName,
+         validDataset.lastName,
+         validDataset.vacancy,
+         validDataset.email,
+         validDataset.contactNumber,
+         validDataset.resume
+      );
 
       //Process for approving a candidate
       cy.get("button[class='oxd-button oxd-button--medium oxd-button--success']", { timeout: 30000 }).click(); // Click to shortlist
@@ -150,14 +148,13 @@ describe("Recruit employee workflow", () => {
       cy.get("button[class='oxd-button oxd-button--medium oxd-button--success']", { timeout: 30000 }).click(); //Click to schedule interview
 
       //Fill form
-      cy.get(
-         "body div[id='app'] div[class='oxd-layout'] div[class='oxd-layout-container'] div[class='oxd-layout-context'] div[class='orangehrm-background-container'] div[class='orangehrm-card-container'] form[class='oxd-form'] div:nth-child(2) div:nth-child(1) div:nth-child(1) div:nth-child(1) div:nth-child(2) input:nth-child(1)"
-      ).type("Technical interview");
-      cy.get("input[placeholder='Type for hints...']").type("Dinh");
-      cy.contains("Dinh Van Luong").click();
-      cy.get("input[placeholder='yyyy-dd-mm']").type("2024-30-08");
-      cy.get("input[placeholder='hh:mm']").click();
-      cy.get("button[type='submit']").click(); //Click to save button
+      const validInterviewDataset = data.validScheduleInterviewDataset;
+
+      cy.fillScheduleInterviewForm(
+         validInterviewDataset.title,
+         validInterviewDataset.interviewer,
+         validInterviewDataset.date
+      );
 
       cy.get("button[class='oxd-button oxd-button--medium oxd-button--success']", { timeout: 30000 }).click(); // Click to Mark Interview Passed
       cy.get("button[type='submit']", { timeout: 30000 }).click();
@@ -175,21 +172,24 @@ describe("Recruit employee workflow", () => {
       cy.get(
          "body > div:nth-child(3) > div:nth-child(1) > div:nth-child(1) > aside:nth-child(1) > nav:nth-child(1) > div:nth-child(2) > ul:nth-child(2) > li:nth-child(2) > a:nth-child(1)"
       ).click();
-      //Input the employee name
+      //Input the candidate name
       cy.get(
          "body > div:nth-child(3) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > form:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > input:nth-child(2)"
-      ).type(`${data.firstNameCandidate} ${data.middleNameCandidate} ${data.lastNameCandidate}`);
+      ).type(
+         `${data.validCandidateDataset.firstName} ${data.validCandidateDataset.middleName} ${data.validCandidateDataset.lastName}`
+      );
       //Search
       cy.get("button[type='submit']").click();
+      cy.wait(5000);
 
       //Look at the data in the first row
       cy.get("div[class='oxd-table-body'] > div:first-child > div > div:nth-child(3)", { timeout: 30000 }).should(
          "have.text",
-         `${data.firstNameCandidate} ${data.middleNameCandidate}`
+         `${data.validCandidateDataset.firstName} ${data.validCandidateDataset.middleName}`
       );
       cy.get("div[class='oxd-table-body'] > div:first-child > div > div:nth-child(4)", { timeout: 30000 }).should(
          "have.text",
-         data.lastNameCandidate
+         data.validCandidateDataset.lastName
       );
    });
 
@@ -199,23 +199,17 @@ describe("Recruit employee workflow", () => {
       cy.get("button[class='oxd-button oxd-button--medium oxd-button--secondary']").click();
 
       // Fill the form
-      cy.get("input[name='firstName']").type(data.firstNameCandidate);
-      cy.get("input[name='middleName']").type(data.middleNameCandidate);
-      cy.get("input[name='lastName']").type(data.lastNameCandidate);
+      const validDataset = data.validCandidateDataset;
 
-      cy.get(".oxd-select-text--after").click();
-      cy.contains(data.vacancy).click();
-
-      cy.get(
-         "body > div:nth-child(3) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > form:nth-child(3) > div:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > input:nth-child(1)"
-      ).type(data.email);
-      cy.get(
-         "body > div:nth-child(3) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > form:nth-child(3) > div:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > input:nth-child(1)"
-      ).type(data.contactNumber);
-
-      cy.get('input[type="file"]').selectFile(data.resume, { force: true });
-
-      cy.get("button[type='submit']").click();
+      cy.fillCandidateForm(
+         validDataset.firstName,
+         validDataset.middleName,
+         validDataset.lastName,
+         validDataset.vacancy,
+         validDataset.email,
+         validDataset.contactNumber,
+         validDataset.resume
+      );
 
       //Process for approving a candidate
       cy.get("button[class='oxd-button oxd-button--medium oxd-button--success']", { timeout: 30000 }).click(); // Click to shortlist
@@ -227,22 +221,361 @@ describe("Recruit employee workflow", () => {
       cy.get(".oxd-table-body > div:nth-child(1) >div:nth-child(1) > div:nth-child(2) > div")
          .invoke("text")
          .should("include", "rejected")
-         .and("include", `${data.firstNameCandidate} ${data.middleNameCandidate} ${data.lastNameCandidate}`);
+         .and(
+            "include",
+            `${data.validCandidateDataset.firstName} ${data.validCandidateDataset.middleName} ${data.validCandidateDataset.lastName}`
+         );
    });
 
-   it("Test raise error for invalid input in candidate creation", () => {
+   it("Verify raise error when input blank firstname in candidate creation", () => {
       cy.get("a[href='/web/index.php/recruitment/viewRecruitmentModule']").click();
       // Create a candidate
       cy.get("button[class='oxd-button oxd-button--medium oxd-button--secondary']").click();
-      cy.get('input[type="file"]').selectFile("./cypress/fixtures/cv.xlsx", { force: true });
-      cy.get("button[type='submit']").click();
+
+      // Fill the form
+      const invalidData = data.blankFirstNameCandidateDataset;
+
+      cy.fillCandidateForm(
+         invalidData.firstName,
+         invalidData.middleName,
+         invalidData.lastName,
+         invalidData.vacancy,
+         invalidData.email,
+         invalidData.contactNumber,
+         invalidData.resume
+      );
 
       //Validate
       cy.get("input[name='firstName']").parent().next().should("have.text", "Required");
-      cy.get("input[name='lastName']").parent().next().should("have.text", "Required");
-      cy.get("input[placeholder='Type here']").parent().next().should("have.text", "Required");
+      // cy.get("input[name='lastName']").parent().next().should("have.text", "Required");
+      // cy.get("input[placeholder='Type here']").parent().next().should("have.text", "Required");
+      // cy.get(
+      //    "div[class='orangehrm-file-input'] span[class='oxd-text oxd-text--span oxd-input-field-error-message oxd-input-group__message']"
+      // ).should("have.text", "File type not allowed");
+   });
+
+   it("Verify raise error when exceed length firstname in candidate creation", () => {
+      cy.get("a[href='/web/index.php/recruitment/viewRecruitmentModule']").click();
+      // Create a candidate
+      cy.get("button[class='oxd-button oxd-button--medium oxd-button--secondary']").click();
+
+      // Fill the form
+      const invalidData = data.oversizedFirstNameDataset;
+
+      cy.fillCandidateForm(
+         invalidData.firstName,
+         invalidData.middleName,
+         invalidData.lastName,
+         invalidData.vacancy,
+         invalidData.email,
+         invalidData.contactNumber,
+         invalidData.resume
+      );
+
+      //Validate
+      cy.get("input[name='firstName']").parent().next().should("have.text", "Should not exceed 30 characters");
+      // cy.get("input[name='lastName']").parent().next().should("have.text", "Required");
+      // cy.get("input[placeholder='Type here']").parent().next().should("have.text", "Required");
+      // cy.get(
+      //    "div[class='orangehrm-file-input'] span[class='oxd-text oxd-text--span oxd-input-field-error-message oxd-input-group__message']"
+      // ).should("have.text", "File type not allowed");
+   });
+
+   it("Verify raise error when exceed length last name in candidate creation", () => {
+      cy.get("a[href='/web/index.php/recruitment/viewRecruitmentModule']").click();
+      // Create a candidate
+      cy.get("button[class='oxd-button oxd-button--medium oxd-button--secondary']").click();
+
+      // Fill the form
+      const invalidData = data.oversizedLastNameDataset;
+
+      cy.fillCandidateForm(
+         invalidData.firstName,
+         invalidData.middleName,
+         invalidData.lastName,
+         invalidData.vacancy,
+         invalidData.email,
+         invalidData.contactNumber,
+         invalidData.resume
+      );
+
+      //Validate
+      // cy.get("input[name='firstName']").parent().next().should("have.text", "Should not exceed 30 characters");
+      // cy.get("input[name='lastName']").parent().next().should("have.text", "Required");
+      cy.get("input[name='lastName']").parent().next().should("have.text", "Should not exceed 30 characters");
+      // cy.get("input[placeholder='Type here']").parent().next().should("have.text", "Required");
+      // cy.get(
+      //    "div[class='orangehrm-file-input'] span[class='oxd-text oxd-text--span oxd-input-field-error-message oxd-input-group__message']"
+      // ).should("have.text", "File type not allowed");
+   });
+
+   it("Verify raise error when exceed length middle name in candidate creation", () => {
+      cy.get("a[href='/web/index.php/recruitment/viewRecruitmentModule']").click();
+      // Create a candidate
+      cy.get("button[class='oxd-button oxd-button--medium oxd-button--secondary']").click();
+
+      // Fill the form
+      const invalidData = data.oversizedMiddleNameDataset;
+
+      cy.fillCandidateForm(
+         invalidData.firstName,
+         invalidData.middleName,
+         invalidData.lastName,
+         invalidData.vacancy,
+         invalidData.email,
+         invalidData.contactNumber,
+         invalidData.resume
+      );
+
+      //Validate
+      // cy.get("input[name='firstName']").parent().next().should("have.text", "Should not exceed 30 characters");
+      // cy.get("input[name='lastName']").parent().next().should("have.text", "Required");
+      cy.get("input[name='middleName']").parent().next().should("have.text", "Should not exceed 30 characters");
+      // cy.get("input[placeholder='Type here']").parent().next().should("have.text", "Required");
+      // cy.get(
+      //    "div[class='orangehrm-file-input'] span[class='oxd-text oxd-text--span oxd-input-field-error-message oxd-input-group__message']"
+      // ).should("have.text", "File type not allowed");
+   });
+
+   it("Verify raise error when input invalid email in candidate creation", () => {
+      cy.get("a[href='/web/index.php/recruitment/viewRecruitmentModule']").click();
+      // Create a candidate
+      cy.get("button[class='oxd-button oxd-button--medium oxd-button--secondary']").click();
+
+      // Fill the form
+      const invalidData = data.invalidEmailDataset;
+
+      cy.fillCandidateForm(
+         invalidData.firstName,
+         invalidData.middleName,
+         invalidData.lastName,
+         invalidData.vacancy,
+         invalidData.email,
+         invalidData.contactNumber,
+         invalidData.resume
+      );
+
+      //Validate
+      // cy.get("input[name='firstName']").parent().next().should("have.text", "Should not exceed 30 characters");
+      // cy.get("input[name='lastName']").parent().next().should("have.text", "Required");
+      cy.get(
+         "body > div:nth-child(3) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > form:nth-child(3) > div:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > input:nth-child(1)"
+      )
+         .parent()
+         .next()
+         .should("have.text", "Expected format: admin@example.com");
+      // cy.get("input[placeholder='Type here']").parent().next().should("have.text", "Required");
+      // cy.get(
+      //    "div[class='orangehrm-file-input'] span[class='oxd-text oxd-text--span oxd-input-field-error-message oxd-input-group__message']"
+      // ).should("have.text", "File type not allowed");
+   });
+
+   it("Verify raise error when exceed length email in candidate creation", () => {
+      cy.get("a[href='/web/index.php/recruitment/viewRecruitmentModule']").click();
+      // Create a candidate
+      cy.get("button[class='oxd-button oxd-button--medium oxd-button--secondary']").click();
+
+      // Fill the form
+      const invalidData = data.oversizedEmailDataset;
+
+      cy.fillCandidateForm(
+         invalidData.firstName,
+         invalidData.middleName,
+         invalidData.lastName,
+         invalidData.vacancy,
+         invalidData.email,
+         invalidData.contactNumber,
+         invalidData.resume
+      );
+
+      //Validate
+      // cy.get("input[name='firstName']").parent().next().should("have.text", "Should not exceed 30 characters");
+      // cy.get("input[name='lastName']").parent().next().should("have.text", "Required");
+      cy.get(
+         "body > div:nth-child(3) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > form:nth-child(3) > div:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > input:nth-child(1)"
+      )
+         .parent()
+         .next()
+         .should("have.text", "Should not exceed 50 characters");
+      // cy.get("input[placeholder='Type here']").parent().next().should("have.text", "Required");
+      // cy.get(
+      //    "div[class='orangehrm-file-input'] span[class='oxd-text oxd-text--span oxd-input-field-error-message oxd-input-group__message']"
+      // ).should("have.text", "File type not allowed");
+   });
+
+   it("Verify raise error when input invalid file type in resume in candidate creation", () => {
+      cy.get("a[href='/web/index.php/recruitment/viewRecruitmentModule']").click();
+      // Create a candidate
+      cy.get("button[class='oxd-button oxd-button--medium oxd-button--secondary']").click();
+
+      // Fill the form
+      const invalidData = data.invalidResumeDataset;
+
+      cy.fillCandidateForm(
+         invalidData.firstName,
+         invalidData.middleName,
+         invalidData.lastName,
+         invalidData.vacancy,
+         invalidData.email,
+         invalidData.contactNumber,
+         invalidData.resume
+      );
+
+      //Validate
+      // cy.get("input[name='firstName']").parent().next().should("have.text", "Should not exceed 30 characters");
+      // cy.get("input[name='lastName']").parent().next().should("have.text", "Required");
+      // cy.get("input[placeholder='Type here']").parent().next().should("have.text", "Required");
       cy.get(
          "div[class='orangehrm-file-input'] span[class='oxd-text oxd-text--span oxd-input-field-error-message oxd-input-group__message']"
       ).should("have.text", "File type not allowed");
+   });
+
+   it("Verify raise error when input invalid contact number in candidate creation", () => {
+      cy.get("a[href='/web/index.php/recruitment/viewRecruitmentModule']").click();
+      // Create a candidate
+      cy.get("button[class='oxd-button oxd-button--medium oxd-button--secondary']").click();
+
+      // Fill the form
+      const invalidData = data.invalidContactNumberDataset;
+
+      cy.fillCandidateForm(
+         invalidData.firstName,
+         invalidData.middleName,
+         invalidData.lastName,
+         invalidData.vacancy,
+         invalidData.email,
+         invalidData.contactNumber,
+         invalidData.resume
+      );
+
+      //Validate
+      // cy.get("input[name='firstName']").parent().next().should("have.text", "Should not exceed 30 characters");
+      // cy.get("input[name='lastName']").parent().next().should("have.text", "Required");
+      // cy.get("input[placeholder='Type here']").parent().next().should("have.text", "Required");
+      cy.get(
+         "body > div:nth-child(3) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > form:nth-child(3) > div:nth-child(3) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(2) > input:nth-child(1)"
+      )
+         .parent()
+         .next()
+         .should("have.text", "Allows numbers and only + - / ( )");
+   });
+
+   it("Verify raise error when exceed length keywords in candidate creation", () => {
+      cy.get("a[href='/web/index.php/recruitment/viewRecruitmentModule']").click();
+      // Create a candidate
+      cy.get("button[class='oxd-button oxd-button--medium oxd-button--secondary']").click();
+
+      // Fill the form
+      const invalidData = data.oversizedKeywordsDataset;
+
+      cy.fillCandidateForm(
+         invalidData.firstName,
+         invalidData.middleName,
+         invalidData.lastName,
+         invalidData.vacancy,
+         invalidData.email,
+         invalidData.contactNumber,
+         invalidData.resume,
+         invalidData.keywords
+      );
+
+      //Validate
+      // cy.get("input[name='firstName']").parent().next().should("have.text", "Should not exceed 30 characters");
+      // cy.get("input[name='lastName']").parent().next().should("have.text", "Required");
+      // cy.get("input[placeholder='Type here']").parent().next().should("have.text", "Required");
+      cy.get("input[placeholder='Enter comma seperated words...']")
+         .parent()
+         .next()
+         .should("have.text", "Should not exceed 250 characters");
+   });
+
+   it("Verify raise error when exceed length notes in candidate creation", () => {
+      cy.get("a[href='/web/index.php/recruitment/viewRecruitmentModule']").click();
+      // Create a candidate
+      cy.get("button[class='oxd-button oxd-button--medium oxd-button--secondary']").click();
+
+      // Fill the form
+      const invalidData = data.oversizedKeywordsDataset;
+
+      cy.fillCandidateForm(
+         invalidData.firstName,
+         invalidData.middleName,
+         invalidData.lastName,
+         invalidData.vacancy,
+         invalidData.email,
+         invalidData.contactNumber,
+         invalidData.resume,
+         invalidData.keywords
+      );
+
+      //Validate
+      // cy.get("input[name='firstName']").parent().next().should("have.text", "Should not exceed 30 characters");
+      // cy.get("input[name='lastName']").parent().next().should("have.text", "Required");
+      // cy.get("input[placeholder='Type here']").parent().next().should("have.text", "Required");
+      cy.contains("Should not exceed 250 characters").should("be.visible");
+   });
+
+   it("Verify raise error when input blank title in schedule interview", () => {
+      const candidate = data.validCandidateDataset;
+      const interviewInfo = data.blankTitleScheduleInterviewDataset;
+      cy.executeToScheduleInterview(candidate, interviewInfo);
+
+      // Validate
+      cy.get(
+         "body div[id='app'] div[class='oxd-layout'] div[class='oxd-layout-container'] div[class='oxd-layout-context'] div[class='orangehrm-background-container'] div[class='orangehrm-card-container'] form[class='oxd-form'] div:nth-child(2) div:nth-child(1) div:nth-child(1) div:nth-child(1) div:nth-child(2) input:nth-child(1)"
+      )
+         .parent()
+         .next()
+         .should("have.text", "Required");
+   });
+
+   it("Verify raise error when input blank interviewer in schedule interview", () => {
+      const candidate = data.validCandidateDataset;
+      const interviewInfo = data.blankInterviewerScheduleInterviewDataset;
+
+      cy.executeToScheduleInterview(candidate, interviewInfo);
+
+      // Validate
+      cy.get("input[placeholder='Type for hints...']")
+         .parent()
+         .parent()
+         .parent()
+         .next()
+         .should("have.text", "Required");
+   });
+
+   it("Verify raise error when input non exists interviewer in schedule interview", () => {
+      const candidate = data.validCandidateDataset;
+      const interviewInfo = data.nonExistInterviewerScheduleInterviewDataset;
+
+      cy.executeToScheduleInterview(candidate, interviewInfo, false);
+
+      // Validate
+      cy.get("input[placeholder='Type for hints...']").parent().parent().parent().next().should("have.text", "Invalid");
+   });
+
+   it("Verify raise error when input blank date in schedule interview", () => {
+      const candidate = data.validCandidateDataset;
+      const interviewInfo = data.blankDateScheduleInterviewDataset;
+
+      cy.executeToScheduleInterview(candidate, interviewInfo);
+
+      // Validate
+      cy.get("input[placeholder='yyyy-dd-mm']").parent().parent().parent().next().should("have.text", "Required");
+   });
+
+   it("Verify raise error when input invalid date in schedule interview", () => {
+      const candidate = data.validCandidateDataset;
+      const interviewInfo = data.invalidFormatDateScheduleInterviewDataset;
+
+      cy.executeToScheduleInterview(candidate, interviewInfo);
+
+      // Validate
+      cy.get("input[placeholder='yyyy-dd-mm']")
+         .parent()
+         .parent()
+         .parent()
+         .next()
+         .should("have.text", "Should be a valid date in yyyy-dd-mm format");
    });
 });

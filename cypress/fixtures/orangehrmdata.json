@@ -1,20 +1,156 @@
 {
-    "username":"Admin",
-    "password":"admin123",
-
-    "firstNameCandidate":"Hieu",
-    "middleNameCandidate":"Vo Minh",
-    "lastNameCandidate":"Nguyen",
-    "vacancy":"Ultra45 Primess",
-    "email":"hieu.work@test.com",
-    "contactNumber":"072891821",
-    "resume":"./cypress/fixtures/cv.pdf",
-
-    "jobTitle":"Testing manager",
-
-    "firstNameEmployee":"Dinh",
-    "middleNameEmployee":"Van",
-    "lastNameEmployee":"Luong",
-    "idEmployee":"9682"
-    
+    "loginInfo": {
+        "username": "Admin",
+        "password": "admin123"
+    },
+    "employeeData": {
+        "firstName": "Dinh",
+        "middleName": "Van",
+        "lastName": "Luong",
+        "id": "9682"
+    },
+    "jobData": {
+        "jobTitle": "Website Deveopler",
+        "vacancy": "Job Advertisements"
+    },
+    "validCandidateDataset": {
+        "firstName": "Hieu",
+        "middleName": "Vo Minh",
+        "lastName": "Nguyen",
+        "vacancy": "Job Advertisements",
+        "email": "hieu.work@test.com",
+        "contactNumber": "072891821",
+        "resume": "./cypress/fixtures/cv.pdf"
+    },
+    "blankFirstNameCandidateDataset": {
+        "firstName": "",
+        "middleName": "Vo Minh",
+        "lastName": "Nguyen",
+        "vacancy": "Job Advertisements",
+        "email": "hieu.work@test.com",
+        "contactNumber": "072891821",
+        "resume": "./cypress/fixtures/cv.pdf"
+    },
+    "oversizedFirstNameDataset": {
+        "firstName": "Nguyen Pham Tran Le Vu Hoang To",
+        "middleName": "Vo Minh",
+        "lastName": "Nguyen",
+        "vacancy": "Job Advertisements",
+        "email": "hieu.work@test.com",
+        "contactNumber": "072891821",
+        "resume": "./cypress/fixtures/cv.pdf"
+    },
+    "blankLastNameCandidateDataset": {
+        "firstName": "",
+        "middleName": "Vo Minh",
+        "lastName": "Nguyen",
+        "vacancy": "Job Advertisements",
+        "email": "hieu.work@test.com",
+        "contactNumber": "072891821",
+        "resume": "./cypress/fixtures/cv.pdf"
+    },
+    "oversizedLastNameDataset": {
+        "firstName": "To",
+        "middleName": "Vo Minh",
+        "lastName": "Nguyen Pham Tran Le Vu Hoang To",
+        "vacancy": "Job Advertisements",
+        "email": "hieu.work@test.com",
+        "contactNumber": "072891821",
+        "resume": "./cypress/fixtures/cv.pdf"
+    },
+    "oversizedMiddleNameDataset": {
+        "firstName": "To",
+        "middleName": "Nguyen Pham Tran Le Vu Hoang To",
+        "lastName": "Nguyen",
+        "vacancy": "Job Advertisements",
+        "email": "hieu.work@test.com",
+        "contactNumber": "072891821",
+        "resume": "./cypress/fixtures/cv.pdf"
+    },
+    "invalidEmailDataset": {
+        "firstName": "Hieu",
+        "middleName": "Vo Minh",
+        "lastName": "Nguyen",
+        "vacancy": "Job Advertisements",
+        "email": "hieuworktestcom",
+        "contactNumber": "072891821",
+        "resume": "./cypress/fixtures/cv.pdf"
+    },
+    "oversizedEmailDataset": {
+        "firstName": "To",
+        "middleName": "Nguyen ",
+        "lastName": "Nguyen",
+        "vacancy": "Job Advertisements",
+        "email": "hieu.work@test.com.edu.hcmus.teach.student.tas.labs",
+        "contactNumber": "072891821",
+        "resume": "./cypress/fixtures/cv.pdf"
+    },
+    "invalidResumeDataset": {
+        "firstName": "Hieu",
+        "middleName": "Vo Minh",
+        "lastName": "Nguyen",
+        "vacancy": "Job Advertisements",
+        "email": "hieu.work@test.com",
+        "contactNumber": "072891821",
+        "resume": "./cypress/fixtures/cv.xlsx"
+    },
+    "invalidContactNumberDataset": {
+        "firstName": "Hieu",
+        "middleName": "Vo Minh",
+        "lastName": "Nguyen",
+        "vacancy": "Job Advertisements",
+        "email": "hieu.work@test.com",
+        "contactNumber": "oseventwoeightnineoneeighttwoone",
+        "resume": "./cypress/fixtures/cv.pdf"
+    },
+    "oversizedKeywordsDataset": {
+        "firstName": "Hieu",
+        "middleName": "Vo Minh",
+        "lastName": "Nguyen",
+        "vacancy": "Job Advertisements",
+        "email": "hieu.work@test.com",
+        "contactNumber": "072891821",
+        "resume": "./cypress/fixtures/cv.pdf",
+        "keywords":"Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello WorldHello World "
+    },
+    "oversizedNotesDataset": {
+        "firstName": "Hieu",
+        "middleName": "Vo Minh",
+        "lastName": "Nguyen",
+        "vacancy": "Job Advertisements",
+        "email": "hieu.work@test.com",
+        "contactNumber": "072891821",
+        "resume": "./cypress/fixtures/cv.pdf",
+        "notes":"Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello WorldHello World "
+    },
+    "validScheduleInterviewDataset":{
+        "title": "Technical interview",
+        "interviewer":"Dinh Van Luong",
+        "date":"2024-30-08"
+    },
+    "blankTitleScheduleInterviewDataset": {
+        "title": "",
+        "interviewer":"Dinh Van Luong",
+        "date":"2024-30-08"
+    },
+    "blankInterviewerScheduleInterviewDataset": {
+        "title": "Technical interview",
+        "interviewer":"",
+        "date":"2024-30-08"
+    },
+    "nonExistInterviewerScheduleInterviewDataset": {
+        "title": "Technical interview",
+        "interviewer":"Nguyen Khanh Hoang",
+        "date":"2024-30-08"
+    },
+    "blankDateScheduleInterviewDataset": {
+        "title": "Technical interview",
+        "interviewer":"Dinh Van Luong",
+        "date":""
+    },
+    "invalidFormatDateScheduleInterviewDataset": {
+        "title": "Technical interview",
+        "interviewer":"Dinh Van Luong",
+        "date":"12/22/11"
+    }
 }
